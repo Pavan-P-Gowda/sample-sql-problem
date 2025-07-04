@@ -1,4 +1,77 @@
-### **ER Diagram Representation**:
+ER Diagram Representation:
++----------------+     +----------------+     +----------------+     +----------------+
+|   Customer    |     |      Order     |     |     Product    |     |    Payment     |
++----------------+     +----------------+     +----------------+     +----------------+
+| CustomerID PK |<--+ | OrderID PK     |<--+ | ProductID PK   |     | PaymentID PK   |
+| Name          |     | OrderDate      |     | ProductName    |     | PaymentDate    |
+| Email         |     | TotalAmount    |     | Price          |     | Amount         |
+| Address       |     | CustomerID FK  |     | StockQuantity  |     | OrderID FK     |
++----------------+     +----------------+     +----------------+     +----------------+
+                             |
+                             | 
+                       +------------------+
+                       |  OrderDetails    |
+                       +------------------+
+                       | OrderDetailID PK |
+                       | OrderID FK       |
+                       | ProductID FK     |
+                       | Quantity         |
+                       +------------------+
+
+
+Converting ER Diagram to Relational Schema
+
+Customer Table:
+CREATE TABLE Customer (
+    CustomerID INT PRIMARY KEY AUTO_INCREMENT,
+    Name VARCHAR(100),
+    Email VARCHAR(100) UNIQUE,
+    Address VARCHAR(255)
+);
+
+Product Table:
+CREATE TABLE Product (
+    ProductID INT PRIMARY KEY AUTO_INCREMENT,
+    ProductName VARCHAR(100),
+    Price DECIMAL(10, 2),
+    StockQuantity INT
+);
+
+Order Table:
+CREATE TABLE Order (
+    OrderID INT PRIMARY KEY AUTO_INCREMENT,
+    OrderDate DATETIME,
+    TotalAmount DECIMAL(10, 2),
+    CustomerID INT,
+    FOREIGN KEY (CustomerID) REFERENCES Customer(CustomerID)
+);
+
+ Payment Table:
+CREATE TABLE Payment (
+    PaymentID INT PRIMARY KEY AUTO_INCREMENT,
+    PaymentDate DATETIME,
+    Amount DECIMAL(10, 2),
+    OrderID INT,
+    FOREIGN KEY (OrderID) REFERENCES Order(OrderID)
+);
+
+
+5. OrderDetails Table (Join Table for Many-to-Many Relationship):
+CREATE TABLE OrderDetails (
+    OrderDetailID INT PRIMARY KEY AUTO_INCREMENT,
+    OrderID INT,
+    ProductID INT,
+    Quantity INT,
+    FOREIGN KEY (OrderID) REFERENCES Order(OrderID),
+    FOREIGN KEY (ProductID) REFERENCES Product(ProductID)
+);
+
+
+
+
+
+
+
 
 
 
